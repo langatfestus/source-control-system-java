@@ -1,25 +1,16 @@
 package commands;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.util.List;
+import repository.Repository;
 
 public class LogCommand {
     public void execute() {
-        File branchesFile = new File(".mygit/branches.json");
-        if (!branchesFile.exists()) {
-            System.out.println("No commit history found.");
-            return;
-        }
-
-        try {
-            List<String> logs = Files.readAllLines(branchesFile.toPath());
-            for (String log : logs) {
-                System.out.println(log);
+        var commitLog = Repository.getCommitLog();
+        if (commitLog.isEmpty()) {
+            System.out.println("No commits yet.");
+        } else {
+            for (String commit : commitLog) {
+                System.out.println(commit);
             }
-        } catch (IOException e) {
-            System.out.println("Error reading commit history: " + e.getMessage());
         }
     }
 }
